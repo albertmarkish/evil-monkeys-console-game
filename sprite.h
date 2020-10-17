@@ -7,6 +7,8 @@ enum {
 	SPRITE_CLASSID,
 	CHARACTER_CLASSID,
 	ENEMY_CLASSID,
+	FIREBALL_CLASSID,
+	MAGE_CLASSID
 };
 
 struct vector
@@ -35,21 +37,24 @@ public:
 
 	void setLogger(Logger* log);
 
+	int classID;
+
 protected:
 	Level* level;
 
 	DrawEngine *drawArea;
-	vector pos;
+	vector position;
 	int spriteIndex;
 	int numLives;
 
-	int classID;
+	//int classID;
 
 	vector facingDirection;
 	virtual void draw(float x, float y) = 0;
 	void erase(float x, float y);
 
 	bool isValidLevelMove(int xpos, int ypos);
+	bool isNpcCollision(int x, int y);
 
 	Logger *logger;
 };

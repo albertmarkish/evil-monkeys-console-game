@@ -17,5 +17,6 @@ protected:
 	void simulateAI(void);
 	Character* goal;
 	virtual void draw(float x, float y);
+	bool isGoalCollision(int x, int y);
 };
 

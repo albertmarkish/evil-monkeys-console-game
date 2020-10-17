@@ -6,8 +6,8 @@ Sprite::Sprite(Level* l, DrawEngine* de, int s_index, float x, float y, int i_li
 
 	drawArea = de;
 	
-	pos.x = x;
-	pos.y = y;
+	position.x = x;
+	position.y = y;
 
 	spriteIndex = s_index;
 
@@ -25,22 +25,22 @@ Sprite::Sprite(Level* l, DrawEngine* de, int s_index, float x, float y, int i_li
 Sprite::~Sprite()
 {
 	// erase the dying sprite
-	erase(pos.x, pos.y);
+	erase(position.x, position.y);
 }
 
 vector Sprite::getPosition(void)
 {
-	return pos;
+	return position;
 }
 
 float Sprite::getX(void)
 {
-	return pos.x;
+	return position.x;
 }
 
 float Sprite::getY(void)
 {
-	return pos.y;
+	return position.y;
 }
 
 void Sprite::addLives(int num)
@@ -65,20 +65,20 @@ void Sprite::idleUpdate(void)
 
 bool Sprite::move(float x, float y)
 {
-	int xpos = (int)(pos.x + x);
-	int ypos = (int)(pos.y + y);
+	int xpos = (int)(position.x + x);
+	int ypos = (int)(position.y + y);
 	
 	if (isValidLevelMove(xpos, ypos))
 	{
-		erase(pos.x, pos.y);
+		erase(position.x, position.y);
 
-		pos.x += x;
-		pos.y += y;
+		position.x += x;
+		position.y += y;
 
 		facingDirection.x = x;
 		facingDirection.y = y;
 
-		draw(pos.x, pos.y);
+		draw(position.x, position.y);
 
 		return true;
 	}
@@ -104,5 +104,23 @@ void Sprite::erase(float x, float y)
 
 bool Sprite::isValidLevelMove(int xpos, int ypos)
 {
-	return !level->isWall(xpos, ypos);
+	return xpos >=0 && ypos >= 0 && !level->isWall(xpos, ypos);
+}
+
+bool Sprite::isNpcCollision(int x, int y)
+{
+	if (level->npc.empty()) {
+		return false;
+	}
+
+	list <Sprite*>::iterator Iter;
+
+	for (Iter = level->npc.begin(); Iter != level->npc.end(); Iter++) {
+		if ((*Iter) != this && (int)(*Iter)->getX() == x && (int)(*Iter)->getY() == y) {
+			//logger->log(Logger::stringFormat("NPC collision at %d %d", x, y));
+			return true;
+		}
+	}
+
+	return false;
 }

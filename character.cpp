@@ -29,8 +29,19 @@ bool Character::keyPress(char c)
 	return false;
 }
 
+void Character::addLives(int num)
+{
+	Sprite::addLives(num);
+
+	if (isAlive()) {
+		position.x = 1;
+		position.y = 1;
+		move(0, 0);
+	}
+}
+
 void Character::draw(float x, float y)
 {
-	logger->log(Logger::stringFormat("Character draw at %4.2f %4.2f", x, y));
+	//logger->log(Logger::stringFormat("Character draw at %4.2f %4.2f", x, y));
 	drawArea->drawSprite(spriteIndex, (int)x, (int)y);
 }

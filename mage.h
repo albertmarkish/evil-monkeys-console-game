@@ -1,0 +1,19 @@
+#pragma once
+#include "character.h"
+
+class Mage :
+    public Character
+{
+public:
+	Mage(Level* l, DrawEngine* de, int s_index, float x = 1, float y = 1, int lives = 3,
+		char spell_key = ' ', char up_key = 'w', char down_key = 's', char left_key = 'a', char right_key = 'd');
+
+	virtual bool keyPress(char c);
+
+protected:
+	void castSpell(void);
+
+private:
+	char spellKey;
+};
+

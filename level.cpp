@@ -35,6 +35,12 @@ Level::~Level()
 		delete[] level[i];
 
 	delete[] level;
+
+	// delete all NPC which didn't die by end of game
+	// normally they are deleted in the update function
+	for (Iter = npc.begin(); Iter != npc.end(); Iter++)
+		delete (*Iter);
+
 }
 
 void Level::createLevel(void)
@@ -86,11 +92,10 @@ void Level::addEnemies(int num)
 
 		if (level[xpos][ypos] != TILE_WALL) {
 
-			logger.log(Logger::stringFormat("Enemy spawn at %d %d", xpos, ypos));
-
+			//logger.log(Logger::stringFormat("Enemy spawn at %d %d", xpos, ypos));
 			Enemy* e = new Enemy(this, drawArea, SPRITE_ENEMY, (float)xpos, float(ypos), 1);
-			e->setLogger(&logger);
 
+			e->setLogger(&logger);
 			e->addGoal(player);
 
 			addNPC((Sprite*)e);
@@ -118,15 +123,30 @@ void Level::addPlayer(Character* p)
 
 void Level::update(void)
 {
-	// process fireballs moving
-	for (Iter = npc.begin(); Iter != npc.end(); Iter++) {
-		(*Iter)->idleUpdate();
+	if (!player->isAlive()) {
+		cout << "GAME OVER. ";
+		return;
+	}
 
-		if ((*Iter)->isAlive() == false) {
-			Sprite* temp = *Iter;
-			Iter--;
-			delete temp;
-			npc.remove(temp);
+	if (npc.empty()) {
+		cout << ">**** VICTORY ****<";
+		return;
+	}
+
+	// process fireballs moving
+	std::list<Sprite*>::iterator i = npc.begin();
+	while (i != npc.end())
+	{
+		(*i)->idleUpdate();
+
+		if (!(*i)->isAlive())
+		{
+			delete* i;
+			i = npc.erase(i);
+		}
+		else
+		{
+			++i;
 		}
 	}
 }

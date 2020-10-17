@@ -9,6 +9,7 @@ public:
 		char up_key = 'w', char down_key = 's', char left_key = 'a', char right_key = 'd');
 
 	virtual bool keyPress(char c);
+	virtual void addLives(int num = 1);
 
 protected:
 	char upKey;
