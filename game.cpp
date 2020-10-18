@@ -34,11 +34,16 @@ bool Game::run(void)
 	frameCount = 0;
 	lastTime = 0;
 
+	bool paused = false;
+
 	while (key != 'q')
 	{
+		if (key == 'p') paused = !paused;
+
 		while (!getInput(&key))
 		{
-			timerUpdate();
+			if(!paused)
+				timerUpdate();
 		}
 
 		level->keyPress(key);
